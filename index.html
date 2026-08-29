@@ -91,8 +91,20 @@
       <span class="eyebrow">Right now</span>
       <h2>Live server status</h2>
     </div>
-    <script type="application/javascript">window.addEventListener('message',function(e){if(e.data.uid&&e.data.type==='sizeUpdate'){var i = document.querySelector('iframe[name="'+e.data.uid+'"]');if(i){i.style.width = e.data.payload.width;i.style.height = e.data.payload.height;}}});</script>
-    <iframe src="https://www.battlemetrics.com/b/YaaG9jSFy/40764435.html?foreground=%23EEEEEE&linkColor=%231185ec&lines=%23333333&background=%23222222&chart=players%3A24H&chartColor=%23FF0700&maxPlayersHeight=300" frameborder="0" style="border:0" name="irecq" title="Beer-UK live player count — BattleMetrics"></iframe>
+    <div class="status-row">
+      <div class="status-card">
+        <script type="application/javascript">window.addEventListener('message',function(e){if(e.data.uid&&e.data.type==='sizeUpdate'){var i = document.querySelector('iframe[name="'+e.data.uid+'"]');if(i){i.style.width = e.data.payload.width;i.style.height = e.data.payload.height;}}});</script>
+        <iframe src="https://www.battlemetrics.com/b/YaaG9jSFy/40764435.html?foreground=%23EEEEEE&linkColor=%231185ec&lines=%23333333&background=%23222222&chart=players%3A24H&chartColor=%23FF0700&maxPlayersHeight=300" frameborder="0" style="border:0" name="irecq" title="Beer-UK live player count — BattleMetrics"></iframe>
+      </div>
+      <div class="status-card status-cta">
+        <div class="eyebrow">Ready to hop in?</div>
+        <p>No queue, no wipe day rush — connect now and grab a base spot before the next reset.</p>
+        <div class="status-cta-btns">
+          <a class="btn" href="https://discord.gg/VJSMF6MfSX">Join the Discord</a>
+          <a class="btn btn-outline" href="steam://run/252490//+connect%20198.244.225.11:28015/">Direct Connect</a>
+        </div>
+      </div>
+    </div>
   </section>
 </div>
 
