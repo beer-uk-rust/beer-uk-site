@@ -81,9 +81,19 @@
   <div class="statline">
     <div class="stat"><div class="k">Thu</div><div class="l">Wipe day (1st of month)</div></div>
     <div class="stat"><div class="k">18:00 GMT</div><div class="l">Wipe time</div></div>
-    <div class="stat"><div class="k">0/25</div><div class="l">Population</div></div>
     <div class="stat"><div class="k">Procedural</div><div class="l">Map</div></div>
   </div>
+</div>
+
+<div class="wrap">
+  <section class="tight" style="padding-bottom:0;">
+    <div class="section-head" style="margin-bottom:16px;">
+      <span class="eyebrow">Right now</span>
+      <h2>Live server status</h2>
+    </div>
+    <script type="application/javascript">window.addEventListener('message',function(e){if(e.data.uid&&e.data.type==='sizeUpdate'){var i = document.querySelector('iframe[name="'+e.data.uid+'"]');if(i){i.style.width = e.data.payload.width;i.style.height = e.data.payload.height;}}});</script>
+    <iframe src="https://www.battlemetrics.com/b/YaaG9jSFy/40764435.html?foreground=%23EEEEEE&linkColor=%231185ec&lines=%23333333&background=%23222222&chart=players%3A24H&chartColor=%23FF0700&maxPlayersHeight=300" frameborder="0" style="border:0" name="irecq" title="Beer-UK live player count — BattleMetrics"></iframe>
+  </section>
 </div>
 
 <div class="wrap">
