@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Google Analytics: only loaded after cookie consent, see main.js -->
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+</script>
+
+<title>Apply | Beer-UK</title>
+<meta name="description" content="Get in touch with Beer-UK — staff applications, ban appeals, and general questions.">
+<link rel="icon" href="images/crest.png">
+<link rel="stylesheet" href="style.css">
+<link rel="canonical" href="https://beer-uk.co.uk/apply">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Beer-UK">
+<meta property="og:url" content="https://beer-uk.co.uk/apply">
+<meta property="og:title" content="Apply | Beer-UK">
+<meta property="og:description" content="Get in touch with Beer-UK — staff applications, ban appeals, and general questions.">
+<meta property="og:image" content="https://beer-uk.co.uk/images/banner.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Apply | Beer-UK">
+<meta name="twitter:description" content="Get in touch with Beer-UK — staff applications, ban appeals, and general questions.">
+<meta name="twitter:image" content="https://beer-uk.co.uk/images/banner.png">
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="wrap">
+    <a class="brand" href="index.html"><img src="images/crest.png" alt="">BEER-UK</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="map.html">Map</a></li>
+      <li><a href="rules.html">Rules</a></li>
+      <li><a href="apply.html" aria-current="page">Apply</a></li>
+      <li><a class="btn" href="https://discord.gg/VJSMF6MfSX">Discord</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="wrap">
+  <section>
+    <div class="section-head" style="margin-bottom:24px;">
+      <span class="eyebrow">Get in touch</span>
+      <h2>Apply, appeal, or just ask</h2>
+      <p>Fill this in and it lands straight with the team. For anything urgent in-game, Discord is faster.</p>
+    </div>
+
+    <div class="form-card">
+      <form name="beer-uk-contact" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="beer-uk-contact">
+        <p class="hp-field">
+          <label>Don't fill this in if you're human: <input name="bot-field"></label>
+        </p>
+
+        <div class="field">
+          <label for="name">Steam / in-game name</label>
+          <input type="text" id="name" name="name" required>
+        </div>
+
+        <div class="field">
+          <label for="discord">Discord username</label>
+          <input type="text" id="discord" name="discord" required>
+        </div>
+
+        <div class="field">
+          <label for="type">What's this about</label>
+          <select id="type" name="type" required>
+            <option value="">Choose one&hellip;</option>
+            <option value="Staff application">Staff application</option>
+            <option value="Ban appeal">Ban appeal</option>
+            <option value="Report a player">Report a player</option>
+            <option value="General question">General question</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="message">Details</label>
+          <textarea id="message" name="message" required placeholder="For a ban appeal: roughly when it happened and why you think it was wrong. For a staff application: your Rust/admin experience and hours you can cover."></textarea>
+        </div>
+
+        <button type="submit" class="btn">Send it</button>
+      </form>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="wrap footer-row">
+    <span>Beer-UK &middot; <span class="mono">198.244.225.11:28015</span></span>
+    <ul class="footer-links">
+      <li><a href="https://discord.gg/VJSMF6MfSX">Discord</a></li>
+      <li><a href="map.html">Map</a></li>
+      <li><a href="rules.html">Rules</a></li>
+      <li><a href="apply.html">Apply</a></li>
+      <li><a href="https://just-wiped.net/rust">Just-Wiped listing</a></li>
+      <li><a href="https://rust-servers.net">rust-servers.net listing</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script src="main.js"></script>
+</body>
+</html>

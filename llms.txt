@@ -1,0 +1,26 @@
+# Beer-UK
+
+> A modded, softcore, raidable UK Rust server. Monthly wipes on the first Thursday (following Facepunch's forced wipe), admin-run surprise events, and an active Discord community. 25 player cap, procedural map.
+
+Beer-UK is a community-run Rust game server aimed at players who want a proper, ongoing community rather than a server that empties out after wipe week. Admins run unscheduled live events (e.g. mass supply signal drops) and tune loot so early game isn't a slog and late game doesn't trivialise everything.
+
+## Key facts
+
+- Server IP: 198.244.225.11:28015
+- Wipe schedule: monthly, first Thursday of the month, 18:00 GMT (19:00 during British Summer Time)
+- Player cap: 25
+- Map: Procedural
+- Style: Modded, softcore, raidable
+
+## Pages
+
+- [Home](https://beer-uk.co.uk/): server overview, live stats, direct-connect button
+- [Map](https://beer-uk.co.uk/map): current wipe's procedural map — seed, world size, monuments
+- [Rules](https://beer-uk.co.uk/rules): full server rules
+- [Apply](https://beer-uk.co.uk/apply): staff applications, ban appeals, general contact
+
+## Links
+
+- Discord: https://discord.gg/VJSMF6MfSX
+- Just-Wiped listing: https://just-wiped.net/rust
+- rust-servers.net listing: https://rust-servers.net

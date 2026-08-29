@@ -1,0 +1,11 @@
+{
+  "name": "beer-uk-site",
+  "private": true,
+  "version": "1.0.0",
+  "engines": {
+    "node": "22"
+  },
+  "dependencies": {
+    "@netlify/blobs": "^8.1.0"
+  }
+}

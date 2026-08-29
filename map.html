@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Google Analytics: only loaded after cookie consent, see main.js -->
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+</script>
+
+<title>Map | Beer-UK</title>
+<meta name="description" content="The current wipe's map for Beer-UK — a modded UK Rust server. Seed, size, monuments and biome breakdown.">
+<link rel="icon" href="images/crest.png">
+<link rel="stylesheet" href="style.css">
+<link rel="canonical" href="https://beer-uk.co.uk/map">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Beer-UK">
+<meta property="og:url" content="https://beer-uk.co.uk/map">
+<meta property="og:title" content="Map | Beer-UK">
+<meta property="og:description" content="The current wipe's map for Beer-UK — seed, size, monuments and biome breakdown.">
+<meta property="og:image" content="https://content.rustmaps.com/maps/287/34227a78f2294495ba14214cec272c9b/map_raw_normalized.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Map | Beer-UK">
+<meta name="twitter:description" content="The current wipe's map for Beer-UK — seed, size, monuments and biome breakdown.">
+<meta name="twitter:image" content="https://content.rustmaps.com/maps/287/34227a78f2294495ba14214cec272c9b/map_raw_normalized.png">
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="wrap">
+    <a class="brand" href="index.html"><img src="images/crest.png" alt="">BEER-UK</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="map.html" aria-current="page">Map</a></li>
+      <li><a href="rules.html">Rules</a></li>
+      <li><a href="apply.html">Apply</a></li>
+      <li><a class="btn" href="https://discord.gg/VJSMF6MfSX">Discord</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="wrap">
+  <section>
+    <div class="section-head" style="margin-bottom:24px;">
+      <span class="eyebrow">Current wipe</span>
+      <h2>Server Map</h2>
+      <p>This is the actual procedural map currently running on Beer-UK — generated from the server's live seed and world size, not a stock preview.</p>
+    </div>
+
+    <div class="statline">
+      <div class="stat"><div class="k" id="map-worldsize">3005</div><div class="l">World size</div></div>
+      <div class="stat"><div class="k" id="map-seed">50000</div><div class="l">Seed</div></div>
+      <div class="stat"><div class="k" id="map-monuments">145</div><div class="l">Monuments</div></div>
+      <div class="stat"><div class="k" id="map-land">49%</div><div class="l">Land</div></div>
+    </div>
+
+    <div style="margin-top:32px; border:1px solid var(--line); overflow:hidden;">
+      <a id="map-link" href="https://rustmaps.com/map/3005_50000" target="_blank" rel="noopener">
+        <img id="map-image" src="https://content.rustmaps.com/maps/287/34227a78f2294495ba14214cec272c9b/map_raw_normalized.png" alt="Beer-UK current wipe map — seed 50000, size 3005" style="width:100%; display:block;">
+      </a>
+    </div>
+
+    <p style="margin-top:16px; text-align:center; color:var(--text-muted); font-size:13.5px;">
+      Click the map to explore it interactively on RustMaps — zoom in, toggle monuments, and check resource heatmaps.
+      <br>This page checks the server automatically and updates itself after each wipe — <span id="map-updated">showing the last known map</span>.
+    </p>
+  </section>
+
+  <section class="tight" style="padding-top:0;padding-bottom:64px;">
+    <div class="callout">
+      <div>
+        <div class="eyebrow">Wipe day is coming up</div>
+        <p style="margin:6px 0 0;">Join the Discord to get pinged the moment the new map and wipe details drop.</p>
+      </div>
+      <a class="btn" href="https://discord.gg/VJSMF6MfSX">Join the Discord</a>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="wrap footer-row">
+    <span>Beer-UK &middot; <span class="mono">198.244.225.11:28015</span></span>
+    <ul class="footer-links">
+      <li><a href="https://discord.gg/VJSMF6MfSX">Discord</a></li>
+      <li><a href="map.html">Map</a></li>
+      <li><a href="rules.html">Rules</a></li>
+      <li><a href="apply.html">Apply</a></li>
+      <li><a href="https://just-wiped.net/rust">Just-Wiped listing</a></li>
+      <li><a href="https://rust-servers.net">rust-servers.net listing</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script src="main.js"></script>
+</body>
+</html>
