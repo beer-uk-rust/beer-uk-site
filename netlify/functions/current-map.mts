@@ -12,7 +12,7 @@ export default async (_req: Request) => {
   return new Response(JSON.stringify(data ?? {}), {
     headers: {
       "Content-Type": "application/json",
-      "Cache-Control": "public, max-age=1800",
+            "Cache-Control": "public, max-age=60",
       "Access-Control-Allow-Origin": "*",
     },
   });
