@@ -204,6 +204,21 @@ section.tight{ padding-top:8px; }
 .section-head{ text-align:center; max-width:60ch; margin:0 auto 36px; }
 .section-head p{ margin:10px auto 0; color:var(--text-muted); }
 
+/* ---- Live status row (home page) ---- */
+.status-row{
+  display:flex; flex-wrap:wrap; justify-content:center; align-items:stretch;
+  gap:20px;
+}
+.status-card{ flex:0 1 300px; }
+.status-cta{
+  border:1px solid var(--line);
+  background:var(--surface);
+  padding:22px 26px;
+  display:flex; flex-direction:column; justify-content:center;
+}
+.status-cta p{ font-size:14.5px; color:var(--text-muted); margin:8px 0 18px; }
+.status-cta-btns{ display:flex; gap:12px; flex-wrap:wrap; }
+
 .features{
   display:grid; grid-template-columns:repeat(3, 1fr); gap:1px;
   background:var(--line); border:1px solid var(--line);
