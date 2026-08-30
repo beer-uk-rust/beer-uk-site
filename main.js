@@ -32,6 +32,49 @@
   }
 })();
 
+// ---- Live wipe countdown (home page only — no-op elsewhere) ----
+(function(){
+  var el = document.getElementById('wipe-countdown');
+  if (!el) return; // not on the home page
+
+  // Rust's monthly force wipe: first Thursday of the month, 18:00 UTC
+  // (that's 18:00 GMT / 19:00 BST depending on time of year).
+  function firstThursdayAt18UTC(year, month){
+    var d = new Date(Date.UTC(year, month, 1, 18, 0, 0));
+    var offset = (4 - d.getUTCDay() + 7) % 7; // Thursday = 4
+    d.setUTCDate(d.getUTCDate() + offset);
+    return d;
+  }
+
+  function nextWipe(from){
+    var y = from.getUTCFullYear();
+    var m = from.getUTCMonth();
+    var candidate = firstThursdayAt18UTC(y, m);
+    if (candidate.getTime() <= from.getTime()) {
+      m += 1;
+      if (m > 11) { m = 0; y += 1; }
+      candidate = firstThursdayAt18UTC(y, m);
+    }
+    return candidate;
+  }
+
+  function pad(n){ return n < 10 ? '0' + n : '' + n; }
+
+  function render(){
+    var now = new Date();
+    var diff = Math.max(0, nextWipe(now).getTime() - now.getTime());
+    var totalSeconds = Math.floor(diff / 1000);
+    var days = Math.floor(totalSeconds / 86400);
+    var hours = Math.floor((totalSeconds % 86400) / 3600);
+    var minutes = Math.floor((totalSeconds % 3600) / 60);
+    var seconds = totalSeconds % 60;
+    el.textContent = days + 'd ' + pad(hours) + 'h ' + pad(minutes) + 'm ' + pad(seconds) + 's';
+  }
+
+  render();
+  setInterval(render, 1000);
+})();
+
 // ---- Live map data (map.html only — no-op elsewhere) ----
 (function(){
   var seedEl = document.getElementById('map-seed');
