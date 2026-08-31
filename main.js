@@ -170,6 +170,40 @@
   });
 })();
 
+// ---- Live server status (home page only — no-op elsewhere) ----
+// Replaces the old BattleMetrics iframe embed, which went blank for some
+// visitors (third-party iframes + browser cookie restrictions don't mix
+// well with BattleMetrics' bot-check). This instead calls our own
+// Netlify function, which fetches BattleMetrics' API server-side.
+(function(){
+  var wrap = document.getElementById('server-status');
+  if (!wrap) return; // not on the home page
+
+  var dot = document.getElementById('server-status-dot');
+  var label = document.getElementById('server-status-label');
+  var playersEl = document.getElementById('server-status-players');
+  var linkEl = document.getElementById('server-status-link');
+
+  fetch('/api/server-status').then(function(r){
+    return r.ok ? r.json() : null;
+  }).then(function(data){
+    if (!data || typeof data.players !== 'number') {
+      label.textContent = 'Status unavailable';
+      return;
+    }
+
+    var online = data.status === 'online';
+    dot.classList.add(online ? 'is-online' : 'is-offline');
+    label.textContent = online ? 'Online' : 'Offline';
+    playersEl.textContent = data.players + (typeof data.maxPlayers === 'number' ? ' / ' + data.maxPlayers : '');
+    if (linkEl && data.rank) {
+      linkEl.textContent = 'BattleMetrics rank #' + data.rank;
+    }
+  }).catch(function(){
+    label.textContent = 'Status unavailable';
+  });
+})();
+
 // ---- Live map data (map.html only — no-op elsewhere) ----
 (function(){
   var seedEl = document.getElementById('map-seed');
