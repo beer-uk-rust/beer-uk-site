@@ -197,6 +197,38 @@ p{ max-width:65ch; }
 }
 .connect-row a.direct-connect:hover{ opacity:0.9; }
 
+/* ---- Direct Connect fallback note (shown if steam:// doesn't launch) ---- */
+.connect-fallback[hidden]{
+  display:none;
+}
+.connect-fallback{
+  display:block;
+  width:100%;
+  margin-top:10px;
+  font-size:12.5px;
+  line-height:1.5;
+  max-width:360px;
+}
+.connect-fallback code{
+  font-family:'JetBrains Mono', monospace;
+  font-size:11.5px;
+  padding:1px 5px;
+}
+.connect-row .connect-fallback{
+  color:#c9b89c;
+}
+.connect-row .connect-fallback code{
+  background:rgba(233,214,176,0.12);
+  color:#f1e6d3;
+}
+.status-cta-btns .connect-fallback{
+  color:var(--text-muted);
+}
+.status-cta-btns .connect-fallback code{
+  background:var(--surface-2);
+  color:var(--text);
+}
+
 /* ---- Stat strip ---- */
 .statline{
   display:flex; flex-wrap:wrap;
