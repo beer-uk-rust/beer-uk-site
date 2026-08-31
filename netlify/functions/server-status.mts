@@ -11,11 +11,20 @@ const SERVER_ID = "40764435";
 export default async (_req: Request) => {
   try {
     const res = await fetch(`https://api.battlemetrics.com/servers/${SERVER_ID}`, {
-      headers: { Accept: "application/json" },
+      headers: {
+        Accept: "application/json",
+        // BattleMetrics sits behind Cloudflare bot-protection, which tends to
+        // block requests that don't look like they came from a real client
+        // (no User-Agent, generic runtime UA, etc). A descriptive UA plus a
+        // couple of ordinary browser-ish headers gets us past that.
+        "User-Agent": "beer-uk.co.uk server-status widget (contact: beer-uk.co.uk/apply.html)",
+        "Accept-Language": "en-GB,en;q=0.9",
+      },
     });
 
     if (!res.ok) {
-      console.error("server-status: BattleMetrics returned", res.status);
+      const bodyText = await res.text().catch(() => "");
+      console.error("server-status: BattleMetrics returned", res.status, bodyText.slice(0, 300));
       return new Response(JSON.stringify({ error: "upstream_error" }), {
         status: 502,
         headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=15" },
@@ -56,4 +65,3 @@ export const config: Config = {
   path: "/api/server-status",
   method: "GET",
 };
-
