@@ -73,6 +73,25 @@ p{ max-width:65ch; }
 
 .wrap{ max-width:980px; margin:0 auto; padding:0 24px; }
 
+/* ---- Wipe banner ---- */
+.wipe-banner{
+  background:var(--accent-2);
+  color:#f6ece0;
+  text-align:center;
+  padding:9px 20px;
+  font-family:'JetBrains Mono', monospace;
+  font-size:13px;
+  letter-spacing:0.01em;
+}
+.wipe-banner a{
+  color:#f6ece0;
+  text-decoration:underline;
+  text-underline-offset:2px;
+  font-weight:600;
+  white-space:nowrap;
+}
+.wipe-banner a:hover{ color:#fff; }
+
 /* ---- Nav ---- */
 .site-nav{
   border-bottom:1px solid var(--line);
