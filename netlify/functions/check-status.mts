@@ -55,6 +55,10 @@ function rconCommand(cmd: string): Promise<string> {
   });
 }
 
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 export default async (_req: Request) => {
   if (!RCON_HOST || !RCON_PORT || !RCON_PASSWORD) {
     console.error("check-status: missing one of RCON_HOST / RCON_PORT / RCON_PASSWORD env vars");
@@ -63,31 +67,43 @@ export default async (_req: Request) => {
 
   const store = getStore("beer-uk-status");
 
-  try {
-    const raw = await rconCommand("serverinfo");
-    const info = JSON.parse(raw);
+  // RCON connections to the game server are occasionally flaky (network
+  // blip, momentary connection limit) — retry a couple of times before
+  // giving up on this poll, rather than leaving stale data in place for
+  // a single bad connection attempt.
+  const ATTEMPTS = 3;
+  let lastError: Error | null = null;
 
-    const payload = {
-      status: "online" as const,
-      players: typeof info.Players === "number" ? info.Players : null,
-      maxPlayers: typeof info.MaxPlayers === "number" ? info.MaxPlayers : null,
-      queued: typeof info.Queued === "number" ? info.Queued : null,
-      updated: new Date().toISOString(),
-    };
+  for (let attempt = 1; attempt <= ATTEMPTS; attempt++) {
+    try {
+      const raw = await rconCommand("serverinfo");
+      const info = JSON.parse(raw);
 
-    await store.setJSON("current-status", payload);
-    console.log(`check-status: ${payload.players}/${payload.maxPlayers} players (${payload.queued ?? 0} queued)`);
-    return new Response("Status updated");
-  } catch (e) {
-    // Don't overwrite last-known-good data on a single failed poll (RCON can
-    // be flaky) — just log it. server-status.mts checks the "updated"
-    // timestamp and treats stale data as unavailable if this keeps failing.
-    console.error("check-status: RCON check failed:", (e as Error).message);
-    return new Response("RCON check failed", { status: 502 });
+      const payload = {
+        status: "online" as const,
+        players: typeof info.Players === "number" ? info.Players : null,
+        maxPlayers: typeof info.MaxPlayers === "number" ? info.MaxPlayers : null,
+        queued: typeof info.Queued === "number" ? info.Queued : null,
+        updated: new Date().toISOString(),
+      };
+
+      await store.setJSON("current-status", payload);
+      console.log(`check-status: ${payload.players}/${payload.maxPlayers} players (${payload.queued ?? 0} queued)${attempt > 1 ? ` (succeeded on attempt ${attempt})` : ""}`);
+      return new Response("Status updated");
+    } catch (e) {
+      lastError = e as Error;
+      if (attempt < ATTEMPTS) await sleep(1500);
+    }
   }
+
+  // Don't overwrite last-known-good data after every attempt failed (RCON
+  // can be flaky) — just log it. server-status.mts keeps serving the last
+  // successful reading regardless of age, so a run of failures here just
+  // means slightly older numbers on the site, not a blank widget.
+  console.error(`check-status: RCON check failed after ${ATTEMPTS} attempts:`, lastError?.message);
+  return new Response("RCON check failed", { status: 502 });
 };
 
 export const config: Config = {
   schedule: "*/5 * * * *",
 };
-
