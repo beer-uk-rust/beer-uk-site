@@ -99,9 +99,16 @@
       <h2>Live server status</h2>
     </div>
     <div class="status-row">
-      <div class="status-card">
-        <script type="application/javascript">window.addEventListener('message',function(e){if(e.data.uid&&e.data.type==='sizeUpdate'){var i = document.querySelector('iframe[name="'+e.data.uid+'"]');if(i){i.style.width = e.data.payload.width;i.style.height = e.data.payload.height;}}});</script>
-        <iframe src="https://www.battlemetrics.com/b/YaaG9jSFy/40764435.html?foreground=%23EEEEEE&linkColor=%231185ec&lines=%23333333&background=%23222222&chart=players%3A24H&chartColor=%23FF0700&maxPlayersHeight=300" frameborder="0" style="border:0" name="irecq" title="Beer-UK live player count — BattleMetrics"></iframe>
+      <div class="status-card server-status" id="server-status">
+        <div class="server-status-top">
+          <span class="server-status-dot" id="server-status-dot"></span>
+          <span class="server-status-label" id="server-status-label">Checking status&hellip;</span>
+        </div>
+        <div class="server-status-players">
+          <span class="k mono" id="server-status-players">&mdash;</span>
+          <span class="l">Players online</span>
+        </div>
+        <a class="server-status-link" id="server-status-link" href="https://www.battlemetrics.com/servers/rust/40764435" target="_blank" rel="noopener">View on BattleMetrics</a>
       </div>
       <div class="status-card status-cta">
         <div class="eyebrow">Ready to hop in?</div>
