@@ -1,64 +1,35 @@
 // Public, read-only endpoint the homepage fetches instead of embedding
 // BattleMetrics' iframe widget directly. The widget was going blank for
-// some visitors — third-party iframes are increasingly unreliable once a
-// browser restricts cross-site cookies, since BattleMetrics' bot-check
-// can't always complete inside the frame. Fetching their API from here
-// (server-to-server, not a visitor's browser) sidesteps that entirely.
+// some visitors (third-party iframes + browser cookie restrictions), and
+// separately BattleMetrics' API now requires a paid subscription — so
+// player counts come from our own game server instead, via RCON.
+//
+// This endpoint itself does no RCON work — it just serves whatever
+// check-status.mts last wrote to the blob store, so it's fast and cheap
+// to hit on every page view (same pattern as current-map.mts).
 import type { Config } from "@netlify/functions";
+import { getStore } from "@netlify/blobs";
 
-const SERVER_ID = "40764435";
+// If the last successful RCON check is older than this, treat it as stale
+// (server or check-status.mts itself may be having trouble) rather than
+// show a possibly-wrong player count.
+const STALE_AFTER_MS = 20 * 60 * 1000; // 20 minutes
 
 export default async (_req: Request) => {
-  try {
-    const res = await fetch(`https://api.battlemetrics.com/servers/${SERVER_ID}`, {
-      headers: {
-        Accept: "application/json",
-        // BattleMetrics sits behind Cloudflare bot-protection, which tends to
-        // block requests that don't look like they came from a real client
-        // (no User-Agent, generic runtime UA, etc). A descriptive UA plus a
-        // couple of ordinary browser-ish headers gets us past that.
-        "User-Agent": "beer-uk.co.uk server-status widget (contact: beer-uk.co.uk/apply.html)",
-        "Accept-Language": "en-GB,en;q=0.9",
-      },
-    });
+  const store = getStore("beer-uk-status");
+  const data = (await store.get("current-status", { type: "json" })) as
+    | { status: string; players: number | null; maxPlayers: number | null; queued: number | null; updated: string }
+    | null;
 
-    if (!res.ok) {
-      const bodyText = await res.text().catch(() => "");
-      console.error("server-status: BattleMetrics returned", res.status, bodyText.slice(0, 300));
-      return new Response(JSON.stringify({ error: "upstream_error" }), {
-        status: 502,
-        headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=15" },
-      });
-    }
+  const isFresh = !!data && Date.now() - new Date(data.updated).getTime() < STALE_AFTER_MS;
 
-    const body = await res.json();
-    const attrs = body?.data?.attributes ?? {};
-
-    const payload = {
-      name: typeof attrs.name === "string" ? attrs.name : null,
-      status: typeof attrs.status === "string" ? attrs.status : null,
-      players: typeof attrs.players === "number" ? attrs.players : null,
-      maxPlayers: typeof attrs.maxPlayers === "number" ? attrs.maxPlayers : null,
-      rank: typeof attrs.rank === "number" ? attrs.rank : null,
-      updated: new Date().toISOString(),
-    };
-
-    return new Response(JSON.stringify(payload), {
-      headers: {
-        "Content-Type": "application/json",
-        // Short cache so the CDN absorbs repeat page loads instead of
-        // hitting BattleMetrics on every single visitor.
-        "Cache-Control": "public, max-age=30",
-        "Access-Control-Allow-Origin": "*",
-      },
-    });
-  } catch (e) {
-    console.error("server-status: fetch failed:", (e as Error).message);
-    return new Response(JSON.stringify({ error: "fetch_failed" }), {
-      status: 502,
-      headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=15" },
-    });
-  }
+  return new Response(JSON.stringify(isFresh ? data : {}), {
+    headers: {
+      "Content-Type": "application/json",
+      "Cache-Control": "public, max-age=30",
+      "Access-Control-Allow-Origin": "*",
+    },
+  });
 };
 
 export const config: Config = {
