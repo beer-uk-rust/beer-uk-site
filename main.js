@@ -75,6 +75,36 @@
   setInterval(render, 1000);
 })();
 
+// ---- Wipe banner date (all pages) — auto-updates each month ----
+(function(){
+  var els = document.querySelectorAll('.wipe-banner .wipe-date');
+  if (!els.length) return;
+
+  // Same rule as the homepage countdown: first Thursday of the month, 18:00 UTC.
+  function firstThursdayAt18UTC(year, month){
+    var d = new Date(Date.UTC(year, month, 1, 18, 0, 0));
+    var offset = (4 - d.getUTCDay() + 7) % 7; // Thursday = 4
+    d.setUTCDate(d.getUTCDate() + offset);
+    return d;
+  }
+  function nextWipe(from){
+    var y = from.getUTCFullYear();
+    var m = from.getUTCMonth();
+    var candidate = firstThursdayAt18UTC(y, m);
+    if (candidate.getTime() <= from.getTime()) {
+      m += 1;
+      if (m > 11) { m = 0; y += 1; }
+      candidate = firstThursdayAt18UTC(y, m);
+    }
+    return candidate;
+  }
+
+  var text = nextWipe(new Date()).toLocaleDateString('en-GB', {
+    weekday: 'long', day: 'numeric', month: 'short', timeZone: 'UTC'
+  });
+  for (var i = 0; i < els.length; i++) els[i].textContent = text;
+})();
+
 // ---- Live map data (map.html only — no-op elsewhere) ----
 (function(){
   var seedEl = document.getElementById('map-seed');
