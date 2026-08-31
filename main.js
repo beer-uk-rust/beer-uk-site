@@ -105,6 +105,71 @@
   for (var i = 0; i < els.length; i++) els[i].textContent = text;
 })();
 
+// ---- Direct Connect fallback (steam:// links — shows manual instructions if Steam doesn't launch) ----
+(function(){
+  var links = document.querySelectorAll('a[href^="steam://"]');
+  if(!links.length) return;
+
+  links.forEach(function(link){
+    var note = document.createElement('div');
+    note.className = 'connect-fallback';
+    note.hidden = true;
+    note.innerHTML = 'Didn\'t open? Make sure Steam is installed and running, then try again — or connect manually: open the in-game console (F1) and type <code>client.connect 198.244.225.11:28015</code>';
+    link.insertAdjacentElement('afterend', note);
+
+    link.addEventListener('click', function(){
+      note.hidden = true;
+      var launched = false;
+      var onBlur = function(){ launched = true; };
+      window.addEventListener('blur', onBlur);
+      setTimeout(function(){
+        window.removeEventListener('blur', onBlur);
+        // If the window never lost focus, the protocol handler almost
+        // certainly didn't fire (Steam wasn't there to catch it).
+        if(!launched && document.hasFocus()){
+          note.hidden = false;
+        }
+      }, 1600);
+    });
+  });
+})();
+
+// ---- Google Ads conversion tracking: "Join the Discord" (outbound click) ----
+// Fires whenever someone leaves the site via a Discord invite link. Works
+// whether or not analytics consent was given — if the Google tag never
+// loaded (consent declined, ad blocker, slow network), the fallback timer
+// still sends the visitor on to Discord so the link never breaks.
+(function(){
+  var CONVERSION_SEND_TO = 'AW-18419875480/L0Z0CMv_neacEj9o89E';
+  var links = document.querySelectorAll('a[href*="discord.gg/VJSMF6MfSX"]');
+  if(!links.length) return;
+
+  links.forEach(function(link){
+    link.addEventListener('click', function(e){
+      var url = link.href;
+      var target = link.target;
+      var sent = false;
+      var go = function(){
+        if(sent) return;
+        sent = true;
+        if(target === '_blank'){
+          window.open(url, '_blank');
+        } else {
+          window.location = url;
+        }
+      };
+      var fallback = setTimeout(go, 400);
+      try {
+        window.gtag && window.gtag('event', 'conversion', {
+          'send_to': CONVERSION_SEND_TO,
+          'event_callback': function(){ clearTimeout(fallback); go(); }
+        });
+      } catch(err){ clearTimeout(fallback); go(); }
+      e.preventDefault();
+    });
+  });
+})();
+
 // ---- Live map data (map.html only — no-op elsewhere) ----
 (function(){
   var seedEl = document.getElementById('map-seed');
@@ -143,6 +208,8 @@
   var GA_ID = 'G-9GQSR2R8X1';
   var STORAGE_KEY = 'beeruk-cookie-consent';
 
+  var ADS_ID = 'AW-18419875480';
+
   function loadGA(){
     var s = document.createElement('script');
     s.async = true;
@@ -150,6 +217,7 @@
     document.head.appendChild(s);
     window.gtag('js', new Date());
     window.gtag('config', GA_ID);
+    window.gtag('config', ADS_ID);
   }
 
   function getConsent(){
@@ -173,7 +241,7 @@
     var bar = document.createElement('div');
     bar.className = 'cookie-bar';
     bar.innerHTML =
-      '<span>This site uses a cookie for basic visitor analytics (Google Analytics). No personal data is sold or shared.</span>' +
+      '<span>This site uses a cookie for basic visitor analytics and to measure ad performance (Google Analytics &amp; Google Ads). No personal data is sold or shared.</span>' +
       '<span class="cookie-bar-actions">' +
       '<button type="button" class="cookie-decline">Decline</button>' +
       '<button type="button" class="cookie-accept">Accept</button>' +
