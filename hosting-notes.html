@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Google AdSense site verification -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1992901942917745"
+     crossorigin="anonymous"></script>
+
+<!-- Google Analytics: only loaded after cookie consent, see main.js -->
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+</script>
+
+<title>Running a Custom RustMaps Map | Beer-UK</title>
+<meta name="description" content="Notes for other Rust server admins on picking a good custom map with RustMaps, and the Shockbyte-specific gotchas we hit getting it to actually load.">
+<link rel="icon" href="images/crest.png">
+<link rel="stylesheet" href="style.css">
+<link rel="canonical" href="https://beer-uk.co.uk/hosting-notes">
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Beer-UK">
+<meta property="og:url" content="https://beer-uk.co.uk/hosting-notes">
+<meta property="og:title" content="Running a Custom RustMaps Map | Beer-UK">
+<meta property="og:description" content="Notes for other Rust server admins on picking a good custom map with RustMaps, and the Shockbyte-specific gotchas we hit getting it to actually load.">
+<meta property="og:image" content="https://beer-uk.co.uk/images/banner.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Running a Custom RustMaps Map | Beer-UK">
+<meta name="twitter:description" content="Notes for other Rust server admins on picking a good custom map with RustMaps, and the Shockbyte-specific gotchas we hit getting it to actually load.">
+<meta name="twitter:image" content="https://beer-uk.co.uk/images/banner.png">
+</head>
+<body>
+
+<div class="wipe-banner">🍺 New wipe <span class="wipe-date">Thursday 3 Sept</span>, 18:00 GMT — fresh map, no queue. <a href="https://discord.gg/VJSMF6MfSX">Join before reset →</a></div>
+
+<nav class="site-nav">
+  <div class="wrap">
+    <a class="brand" href="index.html"><img src="images/crest.png" alt="">BEER-UK</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="map.html">Map</a></li>
+      <li><a href="rules.html">Rules</a></li>
+      <li><a href="apply.html">Apply</a></li>
+      <li><a class="btn" href="https://discord.gg/VJSMF6MfSX">Discord</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="wrap">
+  <section>
+    <div class="section-head" style="margin-bottom:24px;">
+      <span class="eyebrow">Admin notes</span>
+      <h2>Running a Custom RustMaps Map</h2>
+      <p>We run Beer-UK on a hand-picked RustMaps map instead of Shockbyte's default procedural generation. Here's what we look for, and the gotchas we hit getting Shockbyte to actually load it — written for other admins, not players.</p>
+    </div>
+
+    <div class="rule-block">
+      <div class="rule-num">01</div>
+      <div>
+        <h3>What we look for in a map</h3>
+        <p>Monument count that matches the world size — too few and there's nothing to fight over, too many and it's chaos. Land percentage in a sensible range (we aim ~45–55%) rather than a map that's mostly ocean. And a scan of the heatmap for dead zones — big empty stretches with no monuments or resources nearby.</p>
+      </div>
+    </div>
+
+    <div class="rule-block">
+      <div class="rule-num">02</div>
+      <div>
+        <h3>The gotcha: Shockbyte's Custom Map Link field doesn't work alone</h3>
+        <p>Shockbyte's Config UI has a dedicated "Custom Map Link" field under Rust Server Settings. Set it, save, restart — and the server still generates its own procedural map anyway. That field doesn't actually reach the launch command by itself.</p>
+        <p style="margin-top:10px;">The fix: open <b>Config → Startup Parameters</b> and add <span class="mono">+server.levelurl &lt;your RustMaps .map download URL&gt;</span> directly into the custom parameters box, then restart. That's the only thing that reliably works.</p>
+      </div>
+    </div>
+
+    <div class="rule-block">
+      <div class="rule-num">03</div>
+      <div>
+        <h3>It's not just the map link</h3>
+        <p>The same bug pattern affects the dedicated Header Image and Logo Image fields too — if you use those, they need to be duplicated into Startup Parameters as <span class="mono">+server.headerimage</span> and <span class="mono">+server.logoimage</span> as well, or they silently drop out of the actual command. If a Shockbyte "dedicated field" maps to a Rust <span class="mono">server.*</span> convar, don't assume it reaches the server — verify it.</p>
+      </div>
+    </div>
+
+    <div class="rule-block">
+      <div class="rule-num">04</div>
+      <div>
+        <h3>How to actually verify it worked</h3>
+        <p>Don't trust the "Start Command Preview" box right after saving — it can show stale values for a while even when the save went through fine. The real test is the server console after a genuine restart: look for the map image upload line (something like <span class="mono">Rust.MapCache-Images: Image uploaded to backend...</span>) and check the filename matches the map you set, not a fresh procedural hash.</p>
+      </div>
+    </div>
+
+    <div class="rule-block">
+      <div class="rule-num">05</div>
+      <div>
+        <h3>Back up the map file itself</h3>
+        <p>Your server references the map by URL on every boot — if RustMaps has an outage or your account has an issue, that link can go dead. Download the <span class="mono">.map</span> file from RustMaps and keep a copy somewhere you control, so you're not solely dependent on their servers being up at boot time.</p>
+      </div>
+    </div>
+
+    <div class="rule-block">
+      <div class="rule-num">06</div>
+      <div>
+        <h3>Automate the "did the map change" check</h3>
+        <p>Our own <a href="map.html">map page</a> runs a small scheduled job that logs into the server via RCON once a day, reads the live seed and world size, and looks the map up on RustMaps automatically if it's changed — no manual updating needed after a wipe. Worth building something similar if you're maintaining a public map page yourself.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="tight" style="padding-top:0;padding-bottom:64px;">
+    <div class="callout">
+      <div>
+        <div class="eyebrow">Questions about how we run things?</div>
+        <p style="margin:6px 0 0;">Come ask in the Discord — happy to compare notes with other admins.</p>
+      </div>
+      <a class="btn" href="https://discord.gg/VJSMF6MfSX">Join the Discord</a>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="wrap footer-row">
+    <span>Beer-UK &middot; <span class="mono">198.244.225.11:28015</span></span>
+    <ul class="footer-links">
+      <li><a href="https://discord.gg/VJSMF6MfSX">Discord</a></li>
+      <li><a href="map.html">Map</a></li>
+      <li><a href="rules.html">Rules</a></li>
+      <li><a href="apply.html">Apply</a></li>
+      <li><a href="hosting-notes.html" aria-current="page">Hosting Notes</a></li>
+            <li><a href="https://just-wiped.net/rust_servers/3139914">Just-Wiped listing</a></li>
+            <li><a href="https://rust-servers.net/server/178155/">rust-servers.net listing</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script src="main.js"></script>
+</body>
+</html>
