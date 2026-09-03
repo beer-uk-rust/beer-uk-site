@@ -49,6 +49,7 @@
     var linkEl = document.getElementById('map-link');
     var updatedEl = document.getElementById('map-updated');
     var caveatEl = document.getElementById('map-caveat');
+    var linkDescEl = document.getElementById('map-link-desc');
 
     seedEl.textContent = data.seed;
     if (sizeEl) sizeEl.textContent = data.worldsize;
@@ -67,9 +68,11 @@
       if (data.verified === false) {
         linkEl.href = data.imageUrl || linkEl.href;
         if (caveatEl) caveatEl.hidden = false;
+        if (linkDescEl) linkDescEl.textContent = 'Click the map to view it full-size.';
       } else {
         if (data.mapUrl) linkEl.href = data.mapUrl;
         if (caveatEl) caveatEl.hidden = true;
+        if (linkDescEl) linkDescEl.textContent = 'Click the map to explore it interactively on RustMaps — zoom in, toggle monuments, and check resource heatmaps.';
       }
     }
     if (updatedEl && data.updated) {
