@@ -77,6 +77,75 @@
   }).catch(function(){ /* fetch failed — keep whatever's already in the HTML */ });
 })();
 
+// ---- Live server status (index.html only — no-op elsewhere) ----
+(function(){
+  var labelEl = document.getElementById('server-status-label');
+  if (!labelEl) return; // not on the homepage
+
+  var dotEl = document.getElementById('server-status-dot');
+  var playersEl = document.getElementById('server-status-players');
+
+  fetch('/api/server-status').then(function(r){
+    return r.ok ? r.json() : null;
+  }).then(function(data){
+    if (!data || !data.status) {
+      labelEl.textContent = 'Status unavailable';
+      return;
+    }
+    var online = data.status === 'online';
+    if (dotEl) {
+      dotEl.classList.remove('is-online', 'is-offline');
+      dotEl.classList.add(online ? 'is-online' : 'is-offline');
+    }
+    labelEl.textContent = online ? 'Online' : 'Offline';
+    if (playersEl && typeof data.players === 'number') {
+      var maxText = typeof data.maxPlayers === 'number' ? ('/' + data.maxPlayers) : '';
+      var queuedText = data.queued ? (' (+' + data.queued + ' queued)') : '';
+      playersEl.textContent = data.players + maxText + queuedText;
+    }
+  }).catch(function(){
+    labelEl.textContent = 'Status unavailable';
+  });
+})();
+
+// ---- Wipe schedule (banner date + "next wipe in" countdown) — index.html only ----
+// Facepunch forces a wipe on the first Thursday of every month, 18:00 GMT
+// (19:00 during BST — both are 18:00 UTC). Computed here so this never needs
+// a manual date edit — it just always reflects the next occurrence.
+(function(){
+  var dateEl = document.querySelector('.wipe-date');
+  var countdownEl = document.getElementById('wipe-countdown');
+  if (!dateEl && !countdownEl) return; // not on the homepage
+
+  var DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+  function firstThursday(year, month){
+    var d = new Date(Date.UTC(year, month, 1, 18, 0, 0));
+    var offset = (4 - d.getUTCDay() + 7) % 7; // Thursday = 4
+    d.setUTCDate(1 + offset);
+    return d;
+  }
+
+  var now = new Date();
+  var wipe = firstThursday(now.getUTCFullYear(), now.getUTCMonth());
+  if (wipe <= now) wipe = firstThursday(now.getUTCFullYear(), now.getUTCMonth() + 1);
+
+  if (dateEl) {
+    dateEl.textContent = DAYS[wipe.getUTCDay()] + ' ' + wipe.getUTCDate() + ' ' + MONTHS[wipe.getUTCMonth()];
+  }
+
+  if (countdownEl) {
+    var totalMinutes = Math.max(0, Math.round((wipe - now) / 60000));
+    var days = Math.floor(totalMinutes / 1440);
+    var hours = Math.floor((totalMinutes % 1440) / 60);
+    var minutes = totalMinutes % 60;
+    countdownEl.textContent = days > 0 ? (days + 'd ' + hours + 'h')
+      : hours > 0 ? (hours + 'h ' + minutes + 'm')
+      : (minutes + 'm');
+  }
+})();
+
 // ---- Cookie consent + Google Analytics (only loads GA after consent) ----
 (function(){
   var GA_ID = 'G-9GQSR2R8X1';
