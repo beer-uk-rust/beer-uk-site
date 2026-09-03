@@ -47,7 +47,6 @@
     var landEl = document.getElementById('map-land');
     var imgEl = document.getElementById('map-image');
     var linkEl = document.getElementById('map-link');
-    var updatedEl = document.getElementById('map-updated');
     var caveatEl = document.getElementById('map-caveat');
     var linkDescEl = document.getElementById('map-link-desc');
 
@@ -74,10 +73,6 @@
         if (caveatEl) caveatEl.hidden = true;
         if (linkDescEl) linkDescEl.textContent = 'Click the map to explore it interactively on RustMaps — zoom in, toggle monuments, and check resource heatmaps.';
       }
-    }
-    if (updatedEl && data.updated) {
-      var d = new Date(data.updated);
-      updatedEl.textContent = 'confirmed current as of ' + d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
     }
   }).catch(function(){ /* fetch failed — keep whatever's already in the HTML */ });
 })();
