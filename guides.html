@@ -68,15 +68,31 @@ function gtag(){dataLayer.push(arguments);}
 <div class="rule-block">
 <div class="rule-num">02</div>
 <div>
-<h3>How to call one in</h3>
+<h3>Random drop, anywhere on the map</h3>
 <p>Open chat and run <span class="mono">/gcrate start "Medium"</span> — that drops a Medium-tier crate and its guards at a random spot on the map, guards and all.</p>
-<p style="margin-top:10px;">Want it on top of you instead? Run <span class="mono">/gcrate here "Medium"</span> — same thing, but right where you're standing.</p>
 <p style="margin-top:10px;">Swap <span class="mono">"Medium"</span> for <span class="mono">"Hard"</span> or <span class="mono">"Elite"</span> for a tougher fight — see below.</p>
 </div>
 </div>
 
 <div class="rule-block">
 <div class="rule-num">03</div>
+<div>
+<h3>Local drop, right where you're standing</h3>
+<p>Run <span class="mono">/gcrate here "Medium"</span> instead — same event, but it lands on top of your current position rather than somewhere random.</p>
+</div>
+</div>
+
+<div class="rule-block">
+<div class="rule-num">04</div>
+<div>
+<h3>Exact coordinates, anywhere you choose</h3>
+<p>Want it somewhere specific — without standing there yourself? First get the coordinates: stand at the spot, open the F1 console, and run <span class="mono">printpos</span>. It prints something like <span class="mono">(-799.53, 16.40, -1003.23)</span>.</p>
+<p style="margin-top:10px;">Then run <span class="mono">/gcrate position "Medium" "-799.53 16.40 -1003.23"</span> — drop the parentheses and commas from what <span class="mono">printpos</span> gave you, space-separate the three numbers, and keep them in one pair of quotes. That drops the crate and its guards at that exact spot, guards and all.</p>
+</div>
+</div>
+
+<div class="rule-block">
+<div class="rule-num">05</div>
 <div>
 <h3>Pick your difficulty</h3>
 <p><span class="mono">"Medium"</span> — a fair fight, a handful of guards with decent gear. Good default.</p>
@@ -87,7 +103,7 @@ function gtag(){dataLayer.push(arguments);}
 </div>
 
 <div class="rule-block">
-<div class="rule-num">04</div>
+<div class="rule-num">06</div>
 <div>
 <h3>Before you go</h3>
 <p>Guards shoot back — they're armed and fight to the death, so go in geared up. The crate stays locked until every guard is down, no shortcuts. And guards don't check whose base it is near, so dropping one by your own walls (or anyone else's) starts a real fight there.</p>
@@ -125,4 +141,3 @@ function gtag(){dataLayer.push(arguments);}
 <script src="main.js"></script>
 </body>
 </html>
-
