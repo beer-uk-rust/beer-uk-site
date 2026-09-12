@@ -196,6 +196,11 @@ p{ max-width:65ch; }
   font-family:'JetBrains Mono', monospace; font-size:12px; font-weight:600;
 }
 .connect-row a.direct-connect:hover{ opacity:0.9; }
+.hero-status{ margin-top:24px; display:flex; flex-direction:column; align-items:center; gap:8px; }
+.hero-status-label{ font-family:'JetBrains Mono', monospace; font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:#c9b89c; }
+.hero-status-banner{ display:inline-block; line-height:0; }
+.hero-status-banner img{ border:1px solid rgba(233,214,176,0.25); max-width:100%; }
+.hero-status-banner:hover img{ border-color:#e0a84c; }
 
 /* ---- Direct Connect fallback note (shown if steam:// doesn't launch) ---- */
 .connect-fallback[hidden]{
@@ -221,14 +226,6 @@ p{ max-width:65ch; }
   background:rgba(233,214,176,0.12);
   color:#f1e6d3;
 }
-.status-cta-btns .connect-fallback{
-  color:var(--text-muted);
-}
-.status-cta-btns .connect-fallback code{
-  background:var(--surface-2);
-  color:var(--text);
-}
-
 /* ---- Stat strip ---- */
 .statline{
   display:flex; flex-wrap:wrap;
@@ -254,48 +251,6 @@ section{ padding:56px 0; }
 section.tight{ padding-top:8px; }
 .section-head{ text-align:center; max-width:60ch; margin:0 auto 36px; }
 .section-head p{ margin:10px auto 0; color:var(--text-muted); }
-
-/* ---- Live status row (home page) ---- */
-.status-row{
-  display:flex; flex-wrap:wrap; justify-content:center; align-items:stretch;
-  gap:20px;
-}
-.status-card{ flex:0 1 300px; }
-
-/* ---- Live server status card (replaces the old BattleMetrics iframe) ---- */
-.server-status{
-  border:1px solid var(--line);
-  background:var(--surface);
-  padding:22px 26px;
-  display:flex; flex-direction:column; justify-content:center; gap:10px;
-}
-.server-status-top{
-  display:flex; align-items:center; gap:8px;
-  font-size:13px; color:var(--text-muted);
-}
-.server-status-dot{
-  width:8px; height:8px; border-radius:50%;
-  background:var(--text-muted);
-  flex-shrink:0;
-}
-.server-status-dot.is-online{ background:var(--success); }
-.server-status-dot.is-offline{ background:var(--accent-2); }
-.server-status-players{ display:flex; align-items:baseline; gap:8px; }
-.server-status-players .k{ font-size:28px; }
-.server-status-players .l{ font-size:12px; color:var(--text-muted); }
-.server-status-link{
-  font-size:12.5px; color:var(--text-muted); text-decoration:none;
-  border-bottom:1px dotted var(--line); align-self:flex-start;
-}
-.server-status-link:hover{ color:var(--accent-2); border-color:var(--accent-2); }
-.status-cta{
-  border:1px solid var(--line);
-  background:var(--surface);
-  padding:22px 26px;
-  display:flex; flex-direction:column; justify-content:center;
-}
-.status-cta p{ font-size:14.5px; color:var(--text-muted); margin:8px 0 18px; }
-.status-cta-btns{ display:flex; gap:12px; flex-wrap:wrap; }
 
 .features{
   display:grid; grid-template-columns:repeat(3, 1fr); gap:1px;
