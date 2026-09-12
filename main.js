@@ -1,3 +1,4 @@
+
 (function(){
   var btn = document.getElementById('copy-ip');
   var ipText = document.getElementById('ip-text');
@@ -75,37 +76,6 @@
       }
     }
   }).catch(function(){ /* fetch failed — keep whatever's already in the HTML */ });
-})();
-
-// ---- Live server status (index.html only — no-op elsewhere) ----
-(function(){
-  var labelEl = document.getElementById('server-status-label');
-  if (!labelEl) return; // not on the homepage
-
-  var dotEl = document.getElementById('server-status-dot');
-  var playersEl = document.getElementById('server-status-players');
-
-  fetch('/api/server-status').then(function(r){
-    return r.ok ? r.json() : null;
-  }).then(function(data){
-    if (!data || !data.status) {
-      labelEl.textContent = 'Status unavailable';
-      return;
-    }
-    var online = data.status === 'online';
-    if (dotEl) {
-      dotEl.classList.remove('is-online', 'is-offline');
-      dotEl.classList.add(online ? 'is-online' : 'is-offline');
-    }
-    labelEl.textContent = online ? 'Online' : 'Offline';
-    if (playersEl && typeof data.players === 'number') {
-      var maxText = typeof data.maxPlayers === 'number' ? ('/' + data.maxPlayers) : '';
-      var queuedText = data.queued ? (' (+' + data.queued + ' queued)') : '';
-      playersEl.textContent = data.players + maxText + queuedText;
-    }
-  }).catch(function(){
-    labelEl.textContent = 'Status unavailable';
-  });
 })();
 
 // ---- Wipe schedule (banner date + "next wipe in" countdown) — index.html only ----
