@@ -169,3 +169,13 @@
     });
   });
 })();
+
+// ---- GoatCounter (cookie-free visitor stats, no consent needed) ----
+// Dashboard: https://beeruk.goatcounter.com
+(function(){
+  var s = document.createElement('script');
+  s.async = true;
+  s.src = 'https://gc.zgo.at/count.js';
+  s.setAttribute('data-goatcounter', 'https://beeruk.goatcounter.com/count');
+  document.head.appendChild(s);
+})();
